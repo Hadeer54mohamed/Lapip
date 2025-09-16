@@ -14,13 +14,219 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #B4D2AF ;
+    --foreground: #221E1F;
   }
 }
 
 body {
-  background: var(--background);
+  background-color: #B4D2AF; /* اللون الأساسي */
+  background-image: 
+    linear-gradient(rgba(180, 210, 175, 0.8), rgba(180, 210, 175, 0.8)), /* طبقة شفافة */
+    url("/images/pattern.png"); /* الباترن */
+  background-repeat: repeat;
+  background-size: auto;
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.header-bg {
+  padding: 0;
+  margin: 0;
+  background-color: #221E1F ;
+}
+
+.logo-img {
+  margin: auto;
+}
+
+.header-title {
+  font-size: 9pt;
+  font-weight: normal;
+  color: var(--text-light);
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.desktop-nav .nav-link {
+  color: var(--text-light);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: normal;
+  position: relative;
+}
+
+.desktop-nav .nav-link:hover {
+  color: var(--highlight-color);
+  transform: translateY(-2px);
+}
+
+.desktop-nav .nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background-color: var(--highlight-color);
+  transition: width 0.3s ease;
+}
+
+.desktop-nav .nav-link:hover::after {
+  width: 80%;
+}
+
+.lang-btn {
+  padding: 0.5rem 1rem;
+  background-color: var(--secondary-color);
+  color: var(--text-light);
+  border-radius: 0.5rem;
+  font-size: 9pt;
+  font-weight: normal;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.lang-btn:hover {
+  background-color: var(--highlight-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+}
+.product-card {
+  background: linear-gradient(
+    135deg,      /* اتجاه التدرج */
+    #221E1F,     /* غامق */
+    #221E1F,     /* غامق */
+    #667262      /* رمادي مخضر */
+  );
+  background-size: 400% 400%;
+  animation: gradientMove 8s ease infinite; 
+  
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.6), 0 0 15px #b4d2af88;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  cursor: pointer;
+  color: #221E1F; 
+}
+
+/* حركة التدرج */
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+
+.product-card:hover {
+  transform: translateY(-15px) rotateX(5deg) rotateY(5deg);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.8), 0 0 30px #b4d2afcc;
+}
+
+.product-name {
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+  color: #b4d2af; /* لون مميز للعنوان */
+}
+
+.product-category {
+  font-size: 0.95rem;
+  color: #aaa; /* رمادي فاتح عشان يبان */
+  margin-bottom: 12px;
+  font-style: italic;
+}
+
+.product-price {
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: #b4d2af; /* اللون الأخضر الفاتح */
+  margin-bottom: 18px;
+}
+
+.product-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn {
+  flex: 1;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Wishlist */
+.btn-wishlist {
+  background: #b4d2af;
+  color: #221e1f;
+}
+
+/* Cart */
+.btn-cart {
+  background: #667262;
+  color: #fff;
+}
+.btn-cart:hover {
+  background: #55604f;
+}
+
+/* Quickview */
+.btn-quickview {
+  background: transparent;
+  border: 2px solid #b4d2af;
+  color: #b4d2af;
+}
+.btn-quickview:hover {
+  background: #b4d2af;
+  color: #221e1f;
+}
+.categories {
+  
+  display: flex;
+  gap: 12px;
+  margin-bottom: 25px;
+  flex-wrap: wrap; /* عشان يبقوا مرنين على الموبايل */
+}
+.categories button {
+  background-color: #221E1F; /* غامق */
+  border: 2px solid #b4d2af;
+  color: #b4d2af; /* أخضر فاتح للنص */
+  padding: 8px 16px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.categories button:hover {
+  background: #b4d2af; /* فاتح عند hover */
+  color: #221e1f; /* النص غامق */
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(180, 210, 175, 0.6);
+}
+
+.categories button.active {
+  background: #b4d2af; /* نفس تأثير hover */
+  color: #221e1f;
+  box-shadow: 0 6px 15px rgba(180, 210, 175, 0.8);
 }
