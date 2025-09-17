@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { ProductCard } from "./ProductCard";
 import { useI18nClient } from "@/lib/i18nClient";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function ProductsGrid() {
   const { i18n, t, mounted } = useI18nClient();
@@ -10,6 +11,10 @@ export default function ProductsGrid() {
   const [category, setCategory] = useState("all");
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+
+  // pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 12;
 
   // جلب المنتجات
   useEffect(() => {
@@ -67,6 +72,25 @@ export default function ProductsGrid() {
       ? products
       : products.filter((p) => p.category_id === category);
 
+  // إعادة ضبط الصفحة لو غيرنا الكاتيجوري
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [category]);
+
+  // حساب الصفحات
+  const totalPages = Math.ceil(filtered.length / productsPerPage);
+  const startIndex = (currentPage - 1) * productsPerPage;
+  const endIndex = startIndex + productsPerPage;
+  const currentProducts = filtered.slice(startIndex, endIndex);
+
+  // تمرير لأعلى عند تغيير الصفحة
+  const goToPage = (page) => {
+    setCurrentPage(page);
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   // اسم التصنيف الحالي
   const currentCategoryName =
     category === "all"
@@ -98,7 +122,24 @@ export default function ProductsGrid() {
 
   return (
     <div className="w-full">
-      {/* الفلاتر */}
+      <section className="hero">
+        <div className="hero-inner">
+          <h1 className="hero-title">
+            {currentLang === "ar" ? "Turn Your Mode 180° Better" : "Turn Your Mode 180° Better"}
+          </h1>
+          <p className="hero-subtitle">
+            {currentLang === "ar"
+              ? "LAPIP - COFFEE & LOUNGE"
+              : "LAPIP - COFFEE & LOUNGE"}
+          </p>
+        </div>
+        <div className="hero-decor">
+          <span className="hero-orb orb1" />
+          <span className="hero-orb orb2" />
+          <span className="hero-orb orb3" />
+        </div>
+      </section>
+
       <nav className="categories">
         <button
           type="button"
@@ -120,15 +161,13 @@ export default function ProductsGrid() {
         ))}
       </nav>
 
-      {/* شريط التصنيف الحالي */}
       <div className="current-category-banner">
         <h2>{currentCategoryName}</h2>
         <p>{t("Quality you can taste.")}</p>
       </div>
 
-      {/* المنتجات */}
       <div className="products-grid">
-        {filtered.map((product) => (
+        {currentProducts.map((product) => (
           <ProductCard
             key={product.id}
             {...product}
@@ -137,6 +176,45 @@ export default function ProductsGrid() {
           />
         ))}
       </div>
+
+      {totalPages > 1 && (
+        <nav className="pagination">
+          <button
+            type="button"
+            aria-label="السابق"
+            onClick={() => goToPage(Math.max(1, currentPage - 1))}
+            disabled={currentPage === 1}
+            className="page-btn icon"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+
+          {[...Array(totalPages)].map((_, index) => {
+            const page = index + 1;
+            const isActive = currentPage === page;
+            return (
+              <button
+                type="button"
+                key={page}
+                onClick={() => goToPage(page)}
+                className={`page-btn ${isActive ? "active" : ""}`}
+              >
+                {page}
+              </button>
+            );
+          })}
+
+          <button
+            type="button"
+            aria-label="التالي"
+            onClick={() => goToPage(Math.min(totalPages, currentPage + 1))}
+            disabled={currentPage === totalPages}
+            className="page-btn icon"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        </nav>
+      )}
     </div>
   );
 }
