@@ -1,60 +1,140 @@
 "use client";
-import React, { useState } from "react";
-import ProductCard from "./ProductCard";
-
-const products = [
-  { name: "Waka 15k", category: "disposable", price: "EGP499.00" },
-  { name: "Caliburn G3 Lite", category: "pod", price: "EGP599.00" },
-  { name: "Argus Xt Kit", category: "kit", price: "EGP1,850.00" },
-  { name: "VCT Salt", category: "premium", price: "EGP600.00" },
-];
+import React, { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabaseClient";
+import { ProductCard } from "./ProductCard";
+import { useI18nClient } from "@/lib/i18nClient";
 
 export default function ProductsGrid() {
+  const { i18n, t, mounted } = useI18nClient();
+  const currentLang = i18n.language; // "ar" or "en"
   const [category, setCategory] = useState("all");
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
 
+  // جلب المنتجات
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const { data, error } = await supabase
+        .from("products")
+        .select(`
+          id,
+          title_ar,
+          title_en,
+          description_ar,
+          description_en,
+          price,
+          image_url,
+          discount,
+          created_at,
+          category_id,
+          categories (
+            id,
+            name_ar,
+            name_en
+          )
+        `);
+
+      if (error) {
+        console.error("Error fetching products:", error.message);
+      } else {
+        setProducts(data || []);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // جلب الكاتيجوري
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const { data, error } = await supabase
+        .from("categories")
+        .select("id, name_ar, name_en");
+
+      if (error) {
+        console.error("Error fetching categories:", error.message);
+      } else {
+        setCategories(data || []);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  // فلترة المنتجات
   const filtered =
     category === "all"
       ? products
-      : products.filter((p) => p.category === category);
+      : products.filter((p) => p.category_id === category);
+
+  // اسم التصنيف الحالي
+  const currentCategoryName =
+    category === "all"
+      ? t("all")
+      : categories.find((c) => c.id === category)
+      ? (currentLang === "ar"
+          ? categories.find((c) => c.id === category).name_ar
+          : categories.find((c) => c.id === category).name_en)
+      : "";
+
+  // عرض loading
+  if (!mounted) {
+    return (
+      <div className="w-full">
+        <nav className="categories">
+          <button type="button" className="cat-btn active">
+            {t("all")}
+          </button>
+        </nav>
+
+        <div className="products-grid">
+          <div className="skeleton-card"></div>
+          <div className="skeleton-card"></div>
+          <div className="skeleton-card"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <nav className="categories pt-5">
+    <div className="w-full">
+      {/* الفلاتر */}
+      <nav className="categories">
         <button
+          type="button"
           onClick={() => setCategory("all")}
-          className={category === "all" ? "active" : ""}
+          className={`cat-btn ${category === "all" ? "active" : ""}`}
         >
-          الكل
+          {t("all")}
         </button>
-        <button
-          onClick={() => setCategory("disposable")}
-          className={category === "disposable" ? "active" : ""}
-        >
-          الديسبوزبول
-        </button>
-        <button
-          onClick={() => setCategory("pod")}
-          className={category === "pod" ? "active" : ""}
-        >
-          أجهزة البود
-        </button>
-        <button
-          onClick={() => setCategory("kit")}
-          className={category === "kit" ? "active" : ""}
-        >
-          الأجهزة والكيت
-        </button>
-        <button
-          onClick={() => setCategory("premium")}
-          className={category === "premium" ? "active" : ""}
-        >
-          الليكويد البريميم
-        </button>
+
+        {categories.map((c) => (
+          <button
+            type="button"
+            key={c.id}
+            onClick={() => setCategory(c.id)}
+            className={`cat-btn ${category === c.id ? "active" : ""}`}
+          >
+            {currentLang === "ar" ? c.name_ar : c.name_en}
+          </button>
+        ))}
       </nav>
 
+      {/* شريط التصنيف الحالي */}
+      <div className="current-category-banner">
+        <h2>{currentCategoryName}</h2>
+        <p>{t("Quality you can taste.")}</p>
+      </div>
+
+      {/* المنتجات */}
       <div className="products-grid">
-        {filtered.map((product, index) => (
-          <ProductCard key={index} product={product} />
+        {filtered.map((product) => (
+          <ProductCard
+            key={product.id}
+            {...product}
+            category={product.categories}
+            lang={currentLang}
+          />
         ))}
       </div>
     </div>
