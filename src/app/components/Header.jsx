@@ -3,13 +3,17 @@ import Image from "next/image";
 import { useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
-import LanguageSwitcher from "./LanguageSwitcher"; 
+import LanguageSwitcher from "./LanguageSwitcher";
+import { useI18nClient } from "@/lib/i18nClient";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const { i18n, mounted } = useI18nClient();
 
   const toggleMenu = () => setIsOpen((prev) => !prev);
   const closeMenu = () => setIsOpen(false);
+
+  const isRTL = mounted && i18n.language === "ar";
 
   return (
     <header className="header-bg top-0 flex justify-between items-center px-4 py-2 text-white z-50">
@@ -19,7 +23,7 @@ export default function Header() {
           alt="Logo"
           width={100}
           height={100}
-          className="logo-img mr-3"
+          className={`logo-img ${isRTL ? "ml-3" : "mr-3"}`}
         />
       </div>
 
@@ -36,10 +40,12 @@ export default function Header() {
               exit={{ opacity: 0 }}
             />
             <motion.div
-              className="mobile-menu fixed top-0 h-full w-72 z-50 rounded-2xl overflow-hidden"
-              initial={{ x: "100%" }}
+              className={`mobile-menu fixed top-0 h-full w-72 z-50 rounded-2xl overflow-hidden ${
+                isRTL ? "right-0" : "left-0"
+              }`}
+              initial={{ x: isRTL ? "-100%" : "100%" }}
               animate={{ x: 0 }}
-              exit={{ x: "100%" }}
+              exit={{ x: isRTL ? "-100%" : "100%" }}
               transition={{ type: "spring", stiffness: 100, damping: 20 }}
             >
               <div className="mobile-header p-4 flex justify-between items-center border-b border-orange-300">

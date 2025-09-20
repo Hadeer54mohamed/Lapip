@@ -17,9 +17,7 @@ export default function ProductsGrid() {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const { data, error } = await supabase
-        .from("products")
-        .select(`
+      const { data, error } = await supabase.from("products").select(`
           id,
           title_ar,
           title_en,
@@ -88,9 +86,9 @@ export default function ProductsGrid() {
     category === "all"
       ? t("all")
       : categories.find((c) => c.id === category)
-      ? (currentLang === "ar"
-          ? categories.find((c) => c.id === category).name_ar
-          : categories.find((c) => c.id === category).name_en)
+      ? currentLang === "ar"
+        ? categories.find((c) => c.id === category).name_ar
+        : categories.find((c) => c.id === category).name_en
       : "";
 
   if (!mounted) {
@@ -113,7 +111,7 @@ export default function ProductsGrid() {
 
   return (
     <div className="w-full">
-      <section className="hero">
+      {/* <section className="hero">
         <div className="hero-inner">
           <h1 className="hero-title">
             {currentLang === "ar" ? "Turn Your Mode 180° Better" : "Turn Your Mode 180° Better"}
@@ -129,7 +127,7 @@ export default function ProductsGrid() {
           <span className="hero-orb orb2" />
           <span className="hero-orb orb3" />
         </div>
-      </section>
+      </section> */}
 
       <nav className="categories">
         <button
@@ -154,7 +152,11 @@ export default function ProductsGrid() {
 
       <div className="current-category-banner">
         <h2>{currentCategoryName}</h2>
-        <p>{t("Quality you can taste.")}</p>
+        <p>
+          {currentLang === "ar"
+            ? "جودة يمكنك تذوقها."
+            : "Quality you can taste."}
+        </p>
       </div>
 
       <div className="products-grid">
@@ -177,7 +179,11 @@ export default function ProductsGrid() {
             disabled={currentPage === 1}
             className="page-btn icon"
           >
-            <ChevronLeft className="w-5 h-5" />
+            {currentLang === "ar" ? (
+              <ChevronRight className="w-5 h-5" />
+            ) : (
+              <ChevronLeft className="w-5 h-5" />
+            )}
           </button>
 
           {[...Array(totalPages)].map((_, index) => {
@@ -202,7 +208,11 @@ export default function ProductsGrid() {
             disabled={currentPage === totalPages}
             className="page-btn icon"
           >
-            <ChevronRight className="w-5 h-5" />
+            {currentLang === "ar" ? (
+              <ChevronLeft className="w-5 h-5" />
+            ) : (
+              <ChevronRight className="w-5 h-5" />
+            )}
           </button>
         </nav>
       )}
