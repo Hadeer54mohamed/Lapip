@@ -392,11 +392,41 @@ body::before {
   position: absolute;
   top: 8px;
   left: 8px;
-  background-color: #d0fe05;
-  color: #364735;
+  background: linear-gradient(135deg, #ff4757, #ff3838);
+  color: white;
   font-size: 0.875rem;
-  padding: 4px 8px;
-  border-radius: 6px;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);
+  z-index: 10;
+  animation: pulse 2s infinite;
+}
+
+.discount-badge.rtl-badge {
+  left: auto;
+  right: 8px;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Responsive discount badge */
+@media (max-width: 768px) {
+  .discount-badge {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    border-radius: 8px;
+  }
 }
 
 .product-info {
@@ -440,6 +470,18 @@ body::before {
   font-size: 1.2rem;
   color: var(--foreground);
   text-align: right;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.old-price {
+  font-size: 0.9rem;
+  color: #999;
+  text-decoration: line-through;
+  font-weight: 400;
+  opacity: 0.7;
 }
 
 .product-actions {

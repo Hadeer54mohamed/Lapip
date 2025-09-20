@@ -44,9 +44,12 @@ export function ProductCard({
           {lang === "ar" ? category?.name_ar : category?.name_en}
         </p>
         {(description_ar || description_en) && (
-          <p className="product-description">
-            {lang === "ar" ? description_ar : description_en}
-          </p>
+          <p
+            className="product-description"
+            dangerouslySetInnerHTML={{
+              __html: lang === "ar" ? description_ar : description_en,
+            }}
+          />
         )}
         <p className="product-price">
           {finalPrice} {lang === "ar" ? "ج.م" : "EGP"}
