@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
-import LanguageSwitcher from "./LanguageSwitcher"; // استدعاء الكمبوننت
+import LanguageSwitcher from "./LanguageSwitcher"; 
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,7 +13,6 @@ export default function Header() {
 
   return (
     <header className="header-bg top-0 flex justify-between items-center px-4 py-2 text-white z-50">
-      {/* Logo */}
       <div className="logo flex items-center">
         <Image
           src="/images/logo.png"
@@ -24,7 +23,6 @@ export default function Header() {
         />
       </div>
 
-      {/* زرار تغيير اللغة */}
       <LanguageSwitcher />
 
       <AnimatePresence>

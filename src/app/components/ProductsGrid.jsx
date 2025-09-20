@@ -7,16 +7,14 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function ProductsGrid() {
   const { i18n, t, mounted } = useI18nClient();
-  const currentLang = i18n.language; // "ar" or "en"
+  const currentLang = i18n.language;
   const [category, setCategory] = useState("all");
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
 
-  // pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 12;
 
-  // جلب المنتجات
   useEffect(() => {
     const fetchProducts = async () => {
       const { data, error } = await supabase
@@ -49,7 +47,6 @@ export default function ProductsGrid() {
     fetchProducts();
   }, []);
 
-  // جلب الكاتيجوري
   useEffect(() => {
     const fetchCategories = async () => {
       const { data, error } = await supabase
@@ -66,24 +63,20 @@ export default function ProductsGrid() {
     fetchCategories();
   }, []);
 
-  // فلترة المنتجات
   const filtered =
     category === "all"
       ? products
       : products.filter((p) => p.category_id === category);
 
-  // إعادة ضبط الصفحة لو غيرنا الكاتيجوري
   useEffect(() => {
     setCurrentPage(1);
   }, [category]);
 
-  // حساب الصفحات
   const totalPages = Math.ceil(filtered.length / productsPerPage);
   const startIndex = (currentPage - 1) * productsPerPage;
   const endIndex = startIndex + productsPerPage;
   const currentProducts = filtered.slice(startIndex, endIndex);
 
-  // تمرير لأعلى عند تغيير الصفحة
   const goToPage = (page) => {
     setCurrentPage(page);
     if (typeof window !== "undefined") {
@@ -91,7 +84,6 @@ export default function ProductsGrid() {
     }
   };
 
-  // اسم التصنيف الحالي
   const currentCategoryName =
     category === "all"
       ? t("all")
@@ -101,7 +93,6 @@ export default function ProductsGrid() {
           : categories.find((c) => c.id === category).name_en)
       : "";
 
-  // عرض loading
   if (!mounted) {
     return (
       <div className="w-full">
