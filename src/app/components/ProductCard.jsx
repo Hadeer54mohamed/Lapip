@@ -29,13 +29,14 @@ export function ProductCard({
           src={image_url || "/images/placeholder.png"}
           alt={lang === "ar" ? title_ar : title_en}
         />
-        {discount && (
-          <span
-            className={`discount-badge ${isRTL ? "rtl-badge" : "ltr-badge"}`}
-          >
-            -{discount}%
-          </span>
-        )}
+        {discount !== 0 ||
+          (discount === null && (
+            <span
+              className={`discount-badge ${isRTL ? "rtl-badge" : "ltr-badge"}`}
+            >
+              -{discount}%
+            </span>
+          ))}
       </div>
 
       <div className="product-info">
@@ -53,11 +54,12 @@ export function ProductCard({
         )}
         <p className="product-price">
           {finalPrice} {lang === "ar" ? "ج.م" : "EGP"}
-          {discount && (
-            <span className="old-price">
-              {price} {lang === "ar" ? "ج.م" : "EGP"}
-            </span>
-          )}
+          {discount !== 0 ||
+            (discount === null && (
+              <span className="old-price">
+                {price} {lang === "ar" ? "ج.م" : "EGP"}
+              </span>
+            ))}
         </p>
       </div>
     </div>

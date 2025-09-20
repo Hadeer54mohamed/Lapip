@@ -20,13 +20,20 @@ export default function DebugPage() {
       // 🟢 categories
       const { data: categories, error: catErr } = await supabase
         .from("categories")
-        .select("*")
-        .limit(1);
+        .select("*");
 
       if (catErr) {
         console.error("❌ Error fetching categories:", catErr.message);
       } else {
-        console.log("🏷️ Sample category row:", categories);
+        console.log("🏷️ All categories:", categories);
+        console.log(
+          "📂 Main categories:",
+          categories?.filter((c) => !c.parent_id)
+        );
+        console.log(
+          "📁 Subcategories:",
+          categories?.filter((c) => c.parent_id)
+        );
       }
     };
 
@@ -36,7 +43,10 @@ export default function DebugPage() {
   return (
     <div className="p-6">
       <h1 className="text-xl font-bold">Debug Page</h1>
-      <p>افتح Console (F12 → Console) عشان تشوف بيانات أول صف من products و categories 👀</p>
+      <p>
+        افتح Console (F12 → Console) عشان تشوف بيانات products و hierarchical
+        categories 👀
+      </p>
     </div>
   );
 }
