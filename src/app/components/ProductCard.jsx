@@ -53,11 +53,13 @@ export function ProductCard({
           />
         )}
         <p className="product-price">
-          {finalPrice} {lang === "ar" ? "ج.م" : "EGP"}
+          {lang === "ar" ? " السعر: " : "Price: "} {finalPrice}{" "}
+          {lang === "ar" ? "ج.م" : "EGP"}
           {discount !== 0 ||
             (discount === null && (
               <span className="old-price">
-                {price} {lang === "ar" ? "ج.م" : "EGP"}
+                {lang === "ar" ? "السعر: " : "Price: "} {price}{" "}
+                {lang === "ar" ? "ج.م" : "EGP"}
               </span>
             ))}
         </p>

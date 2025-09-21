@@ -13,7 +13,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: "Noto Kufi Arabic", sans-serif;
+  --font-sans: "Cairo", sans-serif;
   --font-mono: var(--font-geist-mono);
 }
 
@@ -26,8 +26,7 @@
 
 body {
   color: var(--foreground);
-  font-family: "Changa", system-ui, -apple-system, Segoe UI, Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+  font-family: "Cairo", sans-serif;
   line-height: 1.6;
   margin: 0;
   padding: 0;
@@ -186,7 +185,7 @@ body::before {
   color: var(--foreground);
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.896);
   animation: fadeUp 600ms ease both;
-  font-family: "El Messiri", "Changa", sans-serif;
+  font-family: "Cairo", "Changa", sans-serif;
 }
 
 .hero-subtitle {
@@ -194,7 +193,7 @@ body::before {
   color: var(--secondary-color);
   font-size: 1.05rem;
   animation: fadeUp 700ms ease both;
-  font-family: "Baloo Bhaijaan 2", "Changa", sans-serif;
+  font-family: "Cairo", sans-serif;
 }
 
 @keyframes heroFloat {
@@ -291,7 +290,7 @@ body::before {
 .video {
   width: 100%;
   height: auto;
-  max-height: 450px;
+
   object-fit: cover;
   display: block;
 }
@@ -367,7 +366,7 @@ body::before {
 }
 
 .product-card {
-  background-color: rgba(137, 160, 6, 0.8);
+  background: linear-gradient(0deg, #297415, #60c742);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(137, 160, 6, 0.4);
   border-radius: 12px;
@@ -439,6 +438,7 @@ body::before {
 
 .product-info {
   margin-bottom: 12px;
+  text-align: center;
 }
 
 .product-info > * {
@@ -506,7 +506,7 @@ body::before {
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-family: "Noto Kufi Arabic", sans-serif;
+  font-family: "Cairo", sans-serif;
 }
 .btn-quickview {
   background: transparent;
@@ -574,7 +574,7 @@ body::before {
   color: var(--foreground);
   text-align: right;
   cursor: pointer;
-  font-family: "Noto Kufi Arabic", sans-serif;
+  font-family: "Cairo", sans-serif;
   font-weight: 500;
   transition: all 0.2s ease;
   border-radius: 0;
@@ -599,7 +599,7 @@ body::before {
   border-radius: 25px;
   cursor: pointer;
   font-weight: 600;
-  font-family: "Noto Kufi Arabic", sans-serif;
+  font-family: "Cairo", sans-serif;
   transition: all 0.3s ease;
 }
 
@@ -649,7 +649,7 @@ body::before {
   border-radius: 25px;
   cursor: pointer;
   font-weight: 600;
-  font-family: "Noto Kufi Arabic", sans-serif;
+  font-family: "Cairo", sans-serif;
   transition: all 0.3s ease;
 }
 
@@ -732,7 +732,7 @@ body::before {
   font-weight: bold;
   border: 2px solid var(--primary-color);
   cursor: pointer;
-  font-family: "Noto Kufi Arabic", sans-serif;
+  font-family: "Cairo", sans-serif;
   transition: all 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -744,7 +744,7 @@ body::before {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 .footer {
-  background-color: var(--primary-color);
+  background-color: #51a939;
   color: var(--foreground);
   text-align: center;
   padding: 15px;
@@ -752,7 +752,7 @@ body::before {
 }
 .footer-title {
   font-size: 1.2rem;
-  color: #777;
+  color: #fafafa;
   text-align: center;
 }
 
@@ -783,7 +783,19 @@ body::before {
   margin: 40px auto;
   max-width: 800px;
 }
-
+.pagination-ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color);
+  font-weight: 700;
+  font-family: "Noto Kufi Arabic", sans-serif;
+  padding: 8px 12px;
+  font-size: 18px;
+  user-select: none;
+  height: 40px;
+  min-width: 30px;
+}
 .category-button {
   position: relative;
   width: 350px;
@@ -793,7 +805,7 @@ body::before {
   cursor: pointer;
   transition: all 0.4s ease;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  border: 2px solid rgba(210, 179, 4, 0.927);
+  border: 2px solid rgba(220, 219, 219, 0.927);
   /* Fallback background color when no image is available */
   background-color: #f0f0f0;
 }
@@ -814,7 +826,7 @@ body::before {
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 20px;
+  padding: 8px;
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(5px);
   border-radius: 0 0 15px 15px;
@@ -823,21 +835,23 @@ body::before {
 }
 
 .button-content h3 {
-  font-size: 1.8rem;
-  font-weight: 700;
+  font-size: 8pt;
+  font-weight: 300;
   margin: 0;
-  font-family: "El Messiri", "Changa", sans-serif;
+  font-family: "Cairo", sans-serif;
   text-shadow: none;
   letter-spacing: 1px;
   transition: transform 0.3s ease;
-  color: var(--foreground);
+  color: #fff;
+  text-shadow: 0 0 5px white, /* Smaller, tighter blur */ 0 0 15px white,
+    /* Wider blur */ 0 0 25px white;
 }
 
 .button-content p {
   font-size: 1.1rem;
   margin: 0;
   opacity: 0.8;
-  font-family: "Baloo Bhaijaan 2", "Changa", sans-serif;
+  font-family: "Cairo", sans-serif;
   text-shadow: none;
   transition: transform 0.3s ease;
   color: var(--foreground);
@@ -853,11 +867,13 @@ body::before {
   .category-button {
     width: 100%;
     max-width: 350px;
-    height: 180px;
+    height: 120px;
   }
 
   .button-content h3 {
-    font-size: 1.5rem;
+    font-size: 13pt;
+    text-shadow: 0 0 5px #262626, /* Smaller, tighter blur */ 0 0 15px #262626,
+      /* Wider blur */ 0 0 25px #262626;
   }
 
   .button-content p {
@@ -876,5 +892,176 @@ body::before {
 
   .button-content p {
     font-size: 0.9rem;
+  }
+}
+
+/* Banner Component Styles */
+.banner-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+
+.banner {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--accent-color)
+  );
+}
+
+.banner.banner-clickable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+}
+
+.banner-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 15px;
+  transition: transform 0.3s ease;
+}
+
+.banner-clickable .banner-image:hover {
+  transform: scale(1.02);
+}
+
+.banner-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--accent-color)
+  );
+  color: var(--text-light);
+  font-size: 1.5rem;
+  font-weight: 600;
+  font-family: "Cairo", sans-serif;
+}
+
+.banner-indicators {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.banner-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.banner-indicator:hover {
+  border-color: rgba(255, 255, 255, 1);
+  transform: scale(1.1);
+}
+
+.banner-indicator.active {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 1);
+}
+
+.banner-skeleton {
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 15px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* RTL Support for Banner */
+html[dir="rtl"] .banner-indicators {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Responsive Design for Banner */
+@media (max-width: 768px) {
+  .banner-container {
+    padding: 0 15px;
+    margin: 15px auto 40px;
+  }
+
+  .banner {
+    height: 150px;
+  }
+
+  .banner-skeleton {
+    height: 150px;
+  }
+
+  .banner-placeholder {
+    font-size: 1.2rem;
+  }
+
+  .banner-indicator {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .banner-container {
+    padding: 0 10px;
+    margin: 10px auto 40px;
+  }
+
+  .banner {
+    height: 120px;
+    border-radius: 10px;
+  }
+
+  .banner-skeleton {
+    height: 120px;
+    border-radius: 10px;
+  }
+
+  .banner-image {
+    border-radius: 10px;
+  }
+
+  .banner-placeholder {
+    font-size: 1rem;
+  }
+
+  .banner-indicators {
+    bottom: 10px;
+    gap: 6px;
+  }
+
+  .banner-indicator {
+    width: 8px;
+    height: 8px;
   }
 }

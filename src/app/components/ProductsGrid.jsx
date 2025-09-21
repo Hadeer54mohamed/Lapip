@@ -4,6 +4,7 @@ import { supabase } from "@/lib/supabaseClient";
 import { ProductCard } from "./ProductCard";
 import { useI18nClient } from "@/lib/i18nClient";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import BannerComponent from "./BannerComponent";
 
 export default function ProductsGrid({
   selectedMainCategory,
@@ -153,6 +154,67 @@ export default function ProductsGrid({
     }
   };
 
+  // Function to get visible page numbers (max 8) with ellipsis indicators
+  const getPaginationItems = () => {
+    const maxVisible = 6; // Reduced to make room for ellipsis and first/last pages
+
+    if (totalPages <= 8) {
+      return Array.from({ length: totalPages }, (_, i) => ({
+        type: "page",
+        value: i + 1,
+      }));
+    }
+
+    const items = [];
+    const startPages = 2; // Always show first 2 pages
+    const endPages = 2; // Always show last 2 pages
+    const centerPages = maxVisible - startPages - endPages; // Remaining pages around current
+
+    // Always add first page
+    items.push({ type: "page", value: 1 });
+
+    // Check if we need ellipsis after first page
+    if (currentPage <= startPages + centerPages / 2 + 1) {
+      // Current page is near the beginning
+      for (let i = 2; i <= Math.min(maxVisible, totalPages - 1); i++) {
+        items.push({ type: "page", value: i });
+      }
+      if (maxVisible < totalPages - 1) {
+        items.push({ type: "ellipsis", value: "end" });
+      }
+    } else if (currentPage >= totalPages - startPages - centerPages / 2) {
+      // Current page is near the end
+      items.push({ type: "ellipsis", value: "start" });
+      for (
+        let i = Math.max(totalPages - maxVisible + 1, 2);
+        i <= totalPages - 1;
+        i++
+      ) {
+        items.push({ type: "page", value: i });
+      }
+    } else {
+      // Current page is in the middle
+      items.push({ type: "ellipsis", value: "start" });
+
+      const halfCenter = Math.floor(centerPages / 2);
+      const start = currentPage - halfCenter;
+      const end = currentPage + halfCenter;
+
+      for (let i = start; i <= end; i++) {
+        items.push({ type: "page", value: i });
+      }
+
+      items.push({ type: "ellipsis", value: "end" });
+    }
+
+    // Always add last page (if not already added)
+    if (totalPages > 1) {
+      items.push({ type: "page", value: totalPages });
+    }
+
+    return items;
+  };
+
   const currentCategoryName =
     category === "all"
       ? t("all")
@@ -236,6 +298,9 @@ export default function ProductsGrid({
         </p>
       </div>
 
+      {/* Banner Component */}
+      <BannerComponent />
+
       <div className="products-grid">
         {currentProducts.map((product) => (
           <ProductCard
@@ -263,17 +328,24 @@ export default function ProductsGrid({
             )}
           </button>
 
-          {[...Array(totalPages)].map((_, index) => {
-            const page = index + 1;
-            const isActive = currentPage === page;
+          {getPaginationItems().map((item, index) => {
+            if (item.type === "ellipsis") {
+              return (
+                <span key={item.value} className="pagination-ellipsis">
+                  ...
+                </span>
+              );
+            }
+
+            const isActive = currentPage === item.value;
             return (
               <button
                 type="button"
-                key={page}
-                onClick={() => goToPage(page)}
+                key={item.value}
+                onClick={() => goToPage(item.value)}
                 className={`page-btn ${isActive ? "active" : ""}`}
               >
-                {page}
+                {item.value}
               </button>
             );
           })}

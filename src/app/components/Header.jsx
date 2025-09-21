@@ -20,7 +20,14 @@ export default function Header() {
       <div className={`absolute top-4 z-10 ${isRTL ? "left-4" : "right-4"}`}>
         <LanguageSwitcher />
       </div>
-      <video src="/video.mp4" autoPlay muted className="video w-full h-auto" />
+      <video
+        src="/video.mp4"
+        autoPlay
+        muted
+        playsInline
+        loop
+        className="video w-full h-auto"
+      />
     </header>
   );
 }
