@@ -26,6 +26,7 @@ export default function Header() {
         muted
         playsInline
         loop
+        poster="/fallback.jpg"
         className="video w-full h-auto"
       />
     </header>
