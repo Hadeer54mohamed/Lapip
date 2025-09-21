@@ -5,7 +5,10 @@ import { ProductCard } from "./ProductCard";
 import { useI18nClient } from "@/lib/i18nClient";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-export default function ProductsGrid() {
+export default function ProductsGrid({
+  selectedMainCategory,
+  resetSubcategory,
+}) {
   const { i18n, t, mounted } = useI18nClient();
   const currentLang = i18n.language;
   const [category, setCategory] = useState("all");
@@ -78,20 +81,18 @@ export default function ProductsGrid() {
   };
 
   const filtered =
-    category === "all"
+    category === "all" && selectedMainCategory
+      ? // Show all products from the selected main category and its subcategories
+        products.filter((p) => {
+          const subcategoryIds = getSubcategoryIds(selectedMainCategory);
+          return (
+            p.category_id === selectedMainCategory ||
+            subcategoryIds.includes(p.category_id)
+          );
+        })
+      : category === "all"
       ? products
-      : products.filter((p) => {
-          // If selected category is a main category, show products from all its subcategories
-          if (isMainCategory(category)) {
-            const subcategoryIds = getSubcategoryIds(category);
-            return (
-              p.category_id === category ||
-              subcategoryIds.includes(p.category_id)
-            );
-          }
-          // If selected category is a subcategory, show only products from that subcategory
-          return p.category_id === category;
-        });
+      : products.filter((p) => p.category_id === category);
 
   // Sort products to show discounted items first
   const sortedProducts = filtered.sort((a, b) => {
@@ -112,7 +113,21 @@ export default function ProductsGrid() {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [category]);
+  }, [category, selectedMainCategory]);
+
+  // Reset category when main category changes
+  useEffect(() => {
+    if (selectedMainCategory) {
+      setCategory("all");
+    }
+  }, [selectedMainCategory]);
+
+  // Reset to "all" when main category is clicked again
+  useEffect(() => {
+    if (selectedMainCategory && resetSubcategory !== undefined) {
+      setCategory("all");
+    }
+  }, [resetSubcategory]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -185,98 +200,32 @@ export default function ProductsGrid() {
         </div>
       </section> */}
 
-      <nav className="categories">
-        <button
-          type="button"
-          onClick={() => {
-            setCategory("all");
-            setOpenDropdown(null);
-          }}
-          className={`cat-btn ${category === "all" ? "active" : ""}`}
-        >
-          {t("all")}
-        </button>
+      {/* Show subcategories only when a main category is selected and "all" is active */}
+      {selectedMainCategory && category === "all" && (
+        <nav className="categories">
+          <button
+            type="button"
+            onClick={() => setCategory("all")}
+            className={`cat-btn ${category === "all" ? "active" : ""}`}
+          >
+            {t("all")}
+          </button>
 
-        {/* Main Categories with Dropdowns */}
-        {categories
-          .filter((c) => !c.parent_id) // Only main categories (no parent)
-          .map((mainCat) => {
-            const subcategories = categories.filter(
-              (subCat) => subCat.parent_id === mainCat.id
-            );
-            const isOpen = openDropdown === mainCat.id;
-            const isMainCatActive = category === mainCat.id;
-            const hasActiveSubcat = subcategories.some(
-              (sub) => category === sub.id
-            );
-
-            return (
-              <div key={mainCat.id} className="category-dropdown">
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (subcategories.length > 0) {
-                      // If has subcategories, toggle dropdown
-                      setOpenDropdown(isOpen ? null : mainCat.id);
-                    } else {
-                      // If no subcategories, select main category
-                      setCategory(mainCat.id);
-                      setOpenDropdown(null);
-                    }
-                  }}
-                  className={`cat-btn main-cat ${
-                    isMainCatActive || hasActiveSubcat ? "active" : ""
-                  }`}
-                >
-                  {currentLang === "ar" ? mainCat.name_ar : mainCat.name_en}
-                  {subcategories.length > 0 && (
-                    <span className={`dropdown-arrow ${isOpen ? "open" : ""}`}>
-                      ▼
-                    </span>
-                  )}
-                </button>
-
-                {/* Dropdown Menu */}
-                {subcategories.length > 0 && isOpen && (
-                  <div className="dropdown-menu">
-                    {/* Main category option */}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setCategory(mainCat.id);
-                        setOpenDropdown(null);
-                      }}
-                      className={`dropdown-item ${
-                        isMainCatActive ? "active" : ""
-                      }`}
-                    >
-                      {currentLang === "ar"
-                        ? `جميع ${mainCat.name_ar}`
-                        : `All ${mainCat.name_en}`}
-                    </button>
-
-                    {/* Subcategories */}
-                    {subcategories.map((subCat) => (
-                      <button
-                        type="button"
-                        key={subCat.id}
-                        onClick={() => {
-                          setCategory(subCat.id);
-                          setOpenDropdown(null);
-                        }}
-                        className={`dropdown-item ${
-                          category === subCat.id ? "active" : ""
-                        }`}
-                      >
-                        {currentLang === "ar" ? subCat.name_ar : subCat.name_en}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-      </nav>
+          {/* Show only subcategories of the selected main category */}
+          {categories
+            .filter((c) => c.parent_id === selectedMainCategory)
+            .map((subCat) => (
+              <button
+                key={subCat.id}
+                type="button"
+                onClick={() => setCategory(subCat.id)}
+                className={`cat-btn ${category === subCat.id ? "active" : ""}`}
+              >
+                {currentLang === "ar" ? subCat.name_ar : subCat.name_en}
+              </button>
+            ))}
+        </nav>
+      )}
 
       <div className="current-category-banner">
         <h2>{currentCategoryName}</h2>

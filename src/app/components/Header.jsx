@@ -16,48 +16,11 @@ export default function Header() {
   const isRTL = mounted && i18n.language === "ar";
 
   return (
-    <header className="header-bg top-0 flex justify-between items-center px-4 py-2 text-white z-50">
-      <div className="logo flex items-center">
-        <Image
-          src="/images/logo.png"
-          alt="Logo"
-          width={100}
-          height={100}
-          className={`logo-img ${isRTL ? "ml-3" : "mr-3"}`}
-        />
+    <header className="header-bg top-0 text-white relative">
+      <div className={`absolute top-4 z-10 ${isRTL ? "left-4" : "right-4"}`}>
+        <LanguageSwitcher />
       </div>
-
-      <LanguageSwitcher />
-
-      <AnimatePresence>
-        {isOpen && (
-          <>
-            <motion.div
-              className="overlay-bg fixed inset-0 z-40"
-              onClick={closeMenu}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.5 }}
-              exit={{ opacity: 0 }}
-            />
-            <motion.div
-              className={`mobile-menu fixed top-0 h-full w-72 z-50 rounded-2xl overflow-hidden ${
-                isRTL ? "right-0" : "left-0"
-              }`}
-              initial={{ x: isRTL ? "-100%" : "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: isRTL ? "-100%" : "100%" }}
-              transition={{ type: "spring", stiffness: 100, damping: 20 }}
-            >
-              <div className="mobile-header p-4 flex justify-between items-center border-b border-orange-300">
-                <h2 className="text-lg font-bold">Menu</h2>
-                <button onClick={closeMenu} aria-label="Close menu">
-                  <FiX className="w-6 h-6" />
-                </button>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+      <video src="/video.mp4" autoPlay muted className="video w-full h-auto" />
     </header>
   );
 }

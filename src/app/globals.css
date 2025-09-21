@@ -22,14 +22,9 @@
     --background: #2e3d2d;
     --foreground: #ffffff;
   }
-
-  body {
-    background-color: var(--background);
-  }
 }
 
 body {
-  background-color: var(--background);
   color: var(--foreground);
   font-family: "Changa", system-ui, -apple-system, Segoe UI, Roboto,
     "Helvetica Neue", Arial, sans-serif;
@@ -135,8 +130,7 @@ body::before {
   z-index: -1;
   background-image: url("/images/mn.png");
   background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
+  background: fixed;
 }
 
 .hero {
@@ -290,7 +284,16 @@ body::before {
 .header-bg {
   background-color: var(--primary-color);
   text-align: center;
-  padding: 15px;
+  position: relative;
+  overflow: hidden;
+}
+
+.video {
+  width: 100%;
+  height: auto;
+  max-height: 450px;
+  object-fit: cover;
+  display: block;
 }
 
 .header-title {
@@ -364,16 +367,21 @@ body::before {
 }
 
 .product-card {
-  background-color: #566857;
+  background-color: rgba(137, 160, 6, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(137, 160, 6, 0.4);
   border-radius: 12px;
   padding: 20px;
-
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease,
+    backdrop-filter 0.3s ease;
 }
 
 .product-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 10px 20px rgba(54, 71, 53, 0.15);
+  box-shadow: 0 10px 20px rgba(137, 160, 6, 0.2);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(137, 160, 6, 0.6);
 }
 
 .product-image {
@@ -683,14 +691,12 @@ body::before {
   font-size: 2rem;
   font-weight: bold;
   color: #364735;
-
   margin: 0;
 }
 
 .current-category-banner p {
   font-size: 1rem;
   color: var(--secondary-color);
-
   margin-top: 5px;
 }
 
@@ -765,4 +771,110 @@ body::before {
   color: var(--foreground);
   margin-top: 4px;
   opacity: 0.9;
+}
+
+/* Category Buttons Styles */
+.category-buttons-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  margin: 40px auto;
+  max-width: 800px;
+}
+
+.category-button {
+  position: relative;
+  width: 350px;
+  height: 200px;
+  border-radius: 15px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  border: 2px solid rgba(210, 179, 4, 0.927);
+  /* Fallback background color when no image is available */
+  background-color: #f0f0f0;
+}
+
+.category-button:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+}
+
+.button-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  border-radius: 0 0 15px 15px;
+  color: var(--foreground);
+  transition: all 0.3s ease;
+}
+
+.button-content h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+  font-family: "El Messiri", "Changa", sans-serif;
+  text-shadow: none;
+  letter-spacing: 1px;
+  transition: transform 0.3s ease;
+  color: var(--foreground);
+}
+
+.button-content p {
+  font-size: 1.1rem;
+  margin: 0;
+  opacity: 0.8;
+  font-family: "Baloo Bhaijaan 2", "Changa", sans-serif;
+  text-shadow: none;
+  transition: transform 0.3s ease;
+  color: var(--foreground);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .category-buttons-container {
+    gap: 15px;
+    padding: 20px 10px;
+  }
+
+  .category-button {
+    width: 100%;
+    max-width: 350px;
+    height: 180px;
+  }
+
+  .button-content h3 {
+    font-size: 1.5rem;
+  }
+
+  .button-content p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .category-button {
+    height: 160px;
+  }
+
+  .button-content h3 {
+    font-size: 1.3rem;
+  }
+
+  .button-content p {
+    font-size: 0.9rem;
+  }
 }
